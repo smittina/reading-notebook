@@ -27,6 +27,6 @@ public class Genre {
     private String title;
 
     @Column(name = "book_id", nullable = true)
-    private int bookId;
+    private Long bookId;
 
 }

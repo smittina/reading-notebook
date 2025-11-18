@@ -8,4 +8,6 @@ import com.book.notebook.entity.Author;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long>{
 
+    Author findById(long id);
+    Author findByName(String name);
 }

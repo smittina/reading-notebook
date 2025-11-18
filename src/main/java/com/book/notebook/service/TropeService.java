@@ -14,6 +14,10 @@ public class TropeService {
     @Autowired
     private TropeRepository tropeRepository;
 
+    public List<Trope> getTropeByBookId(Long bookId) {
+        return tropeRepository.findByBookId(bookId);
+    }
+
     public List<Trope> getTropeByTitle(String title) {
        return tropeRepository.findAllByTitle(title);
     }

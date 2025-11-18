@@ -9,6 +9,8 @@ import com.book.notebook.entity.Trope;
 @Repository
 public interface TropeRepository extends JpaRepository<Trope, Long> {
 
+        List<Trope> findByBookId(Long bookId);
+
         List<Trope> findAllByTitle(String title);
 
 

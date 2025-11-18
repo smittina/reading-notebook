@@ -2,6 +2,7 @@ package com.book.notebook.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.book.notebook.entity.*;
+import com.book.notebook.model.BookDetail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,7 +28,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.book.notebook.entity.Reading;
 import com.book.notebook.enumeration.StatusOfReading;
 import com.book.notebook.enumeration.TypeOfReading;
 import com.book.notebook.repository.ReadingRepository;
@@ -35,16 +37,32 @@ public class ReadingServiceTest {
 
     private static final List<Reading> readings = new ArrayList<>();
     private static final List<Reading> readingsByYear = new ArrayList<>();
+    private static Book book = null;
+    private static Author author = null;
+    private static final List<Genre> genres = new ArrayList<>();
+    private static final List<Trope> tropes = new ArrayList<>();
+    private static final List<Quotation> quotations = new ArrayList<>();
 
     @Mock
     private ReadingRepository readingRepository;
+    @Mock
+    private BookService bookService;
+    @Mock
+    private AuthorService authorService;
+    @Mock
+    private GenreService genreService;
+    @Mock
+    private TropeService tropeService;
+    @Mock
+    private QuotationService quotationService;
 
     @InjectMocks
     private ReadingService serviceTest;
 
     @BeforeAll
     static void init() {
-        
+
+        // Readings
         Reading reading1 = new Reading(
                 1L,
                 1L,
@@ -95,6 +113,50 @@ public class ReadingServiceTest {
         
         readings.addAll(Arrays.asList(reading1, reading2, reading3, reading4));
         readingsByYear.addAll(Arrays.asList(reading1, reading2));
+
+        // BookDetail
+        book = new Book(
+                1L,
+                1L,
+                "Le Pont des Tempêtes",
+                null,
+                "synopsis",
+                true,
+                false,
+                1
+        );
+        author = new Author(
+               1L,
+               "Danielle L. Jensen"
+        );
+        Genre genre1 = new Genre(
+          1L,
+          "Fantasy",
+          1L
+        );
+        Genre genre2 = new Genre(
+          2L,
+          "Romantasy",
+          1L
+        );
+        Trope trope1 = new Trope(
+               1L,
+               "Mariage arrangé",
+               1L
+        );
+        Trope trope2 = new Trope(
+                2L,
+                "Ennemies To Lovers",
+                1L
+        );
+        Quotation quotation1 = new Quotation(
+                1L,
+                "À présent chaque victoire, chaque défaite, chaque caresse ou chaque bataille… tout cela n’appartiendrait qu’à elle. Elle serait maîtresse de son destin, comme elle était maîtresse de cet instant.",
+                1L
+        );
+        genres.addAll(Arrays.asList(genre1, genre2));
+        tropes.addAll(Arrays.asList(trope1, trope2));
+        quotations.addAll(Arrays.asList(quotation1));
     }
 
     @BeforeEach
@@ -216,5 +278,68 @@ public class ReadingServiceTest {
             assertEquals(expected.get(11), result.get(11));
             assertEquals(expected.get(12), result.get(12));
         }
+    }
+
+    @Test
+    public void getBookDetailsTest() {
+        // given
+        BookDetail expected = new BookDetail(
+                readings.getFirst(),
+                book,
+                author,
+                genres,
+                tropes,
+                quotations
+        );
+
+        doReturn(book).when(bookService).getBookById(anyLong());
+        doReturn(author).when(authorService).getById(anyLong());
+        doReturn(genres).when(genreService).getAllByIdBook(anyLong());
+        doReturn(tropes).when(tropeService).getTropeByBookId(anyLong());
+        doReturn(quotations).when(quotationService).getAllByBookId(anyLong());
+
+        // when
+        BookDetail result = serviceTest.getBookDetails(readings.getFirst());
+
+        // then
+        assertEquals(expected.getTitle(), result.getTitle());
+        assertEquals(expected.getAuthorName(), result.getAuthorName());
+        assertEquals(expected.getCover(), result.getCover());
+        assertEquals(expected.getSynopsis(), result.getSynopsis());
+        assertEquals(expected.getGenres().size(), result.getGenres().size());
+        if (result.getGenres().size() ==2) {
+            assertEquals(expected.getGenres().get(0), result.getGenres().get(0));
+            assertEquals(expected.getGenres().get(1), result.getGenres().get(1));
+        }
+        assertEquals(expected.getTropes().size(), result.getTropes().size());
+        if (result.getTropes().size() == 2) {
+            assertEquals(expected.getTropes().get(0), result.getTropes().get(0));
+            assertEquals(expected.getTropes().get(1), result.getTropes().get(1));
+        }
+        assertEquals(expected.getPageNumber(), result.getPageNumber());
+        assertEquals(expected.getNumberOfTome(), result.getNumberOfTome());
+        assertEquals(expected.getStatus(), result.getStatus());
+        assertEquals(expected.getTypeOfReading(), result.getTypeOfReading());
+        assertEquals(expected.getStarting(), result.getStarting());
+        assertEquals(expected.getFinished(), result.getFinished());
+        assertEquals(expected.getQuotations().size(), result.getQuotations().size());
+        if (!result.getQuotations().isEmpty()) {
+            assertEquals(expected.getQuotations().get(0), result.getQuotations().get(0));
+        }
+        assertEquals(expected.getCurrentPage(), result.getCurrentPage());
+    }
+
+    @Test
+    public void getBookDetailsWhenBookIsNullTest() {
+        // given
+        BookDetail expected = null;
+
+        doReturn(null).when(bookService).getBookById(anyLong());
+
+        // when
+        BookDetail result = serviceTest.getBookDetails(readings.getFirst());
+
+        // then
+        assertEquals(expected, result);
     }
 }
