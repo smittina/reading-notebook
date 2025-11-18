@@ -27,6 +27,6 @@ public class Quotation {
     private String quoteText;
 
     @Column(name = "book_id", nullable = false)
-    private Long BookId;
+    private Long bookId;
 
 }

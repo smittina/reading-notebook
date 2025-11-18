@@ -9,5 +9,6 @@ import com.book.notebook.entity.Author;
 public interface AuthorRepository extends JpaRepository<Author, Long>{
 
     Author findById(long id);
-    Author findByName(String name);
+
+    Author findByFullname(String fullname);
 }
