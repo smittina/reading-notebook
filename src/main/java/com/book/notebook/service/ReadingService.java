@@ -13,16 +13,47 @@ import com.book.notebook.constant.ReadingConstant;
 import com.book.notebook.entity.Reading;
 import com.book.notebook.repository.ReadingRepository;
 
+/**
+ * Service linked to Reading Repository
+ */
 @Service
 public class ReadingService {
 
     @Autowired
     private ReadingRepository readingRepository;
 
+    /**
+     * Get all readings without worrying about year of reading
+     * @return list of all readings
+     */
     public List<Reading> getAll() {
         return readingRepository.findAll();
     }
 
+
+    /**
+     * Get all readings for a specific year
+     * @param year year selected
+     * @return list of all readings for a specific year
+     */
+    public List<Reading> getAllByYearOfReading(int year) {
+        return readingRepository.findAllByYearOfReading(year);
+    }
+
+    /**
+     * Get all readings for specific month and year
+     * @param year year selected
+     * @param month month selected
+     * @return list of all readings for specific month and year
+     */
+    public List<Reading> getAllByMonthAndYearOfReading(int year, int month) {
+        return readingRepository.findAllByYearOfReadingAndMonthOfReading(year, month);
+    }
+
+    /**
+     * Get all readings by year of readings
+     * @return map of reading's number by year of reading
+     */
     public Map<Integer, Long> getAllYearsOfReadings() {
         Map<Integer, Long> readingsByYears = new HashMap<>();
         List<Reading> readings = getAll();
@@ -31,9 +62,9 @@ public class ReadingService {
             uniqueAllYearsOfReading = readings.stream()
                 .map(Reading::getYearOfReading)
                 .distinct()
-                .collect(Collectors.toList());    
+                .toList();
                    
-            uniqueAllYearsOfReading.stream().forEach(y -> {
+            uniqueAllYearsOfReading.forEach(y -> {
                 long numberOfReading = readings.stream()
                     .filter(e -> e.getYearOfReading() == y)
                     .count();
@@ -43,6 +74,11 @@ public class ReadingService {
         return readingsByYears;
     }
 
+    /**
+     * Get all readings by months of reading for a specific year
+     * @param year year of reading
+     * @return map of number of reading by month for a specific year
+     */
     public Map<Integer, Long> getAllMonthsOfReadingsByYear(int year) {
         Map<Integer, Long> readingsByMonths = initializeMonthsOfReadings();
         List<Reading> readingsOfYear = getAllByYearOfReading(year);
@@ -51,9 +87,9 @@ public class ReadingService {
             uniqueAllMonthsOfReading = readingsOfYear.stream()
             .map(Reading::getMonthOfReading)
             .distinct()
-            .collect(Collectors.toList());
+            .toList();
 
-            uniqueAllMonthsOfReading.stream().forEach(m -> {
+            uniqueAllMonthsOfReading.forEach(m -> {
                 long numberOfReading = readingsOfYear.stream()
                 .filter(e -> e.getMonthOfReading() == m)
                 .count();
@@ -64,6 +100,10 @@ public class ReadingService {
         return readingsByMonths;
     }
 
+    /**
+     * Init readings to 0 for all months of a year
+     * @return map with all months inits to 0 reading
+     */
     private Map<Integer, Long> initializeMonthsOfReadings() {
         Map<Integer, Long> months = new HashMap<>();
         for(int i = 0; i <12; i++) {
@@ -71,15 +111,4 @@ public class ReadingService {
         }
         return months;
     }
-
-    public List<Reading> getAllByYearOfReading(int year) {
-        List<Reading> readings = readingRepository.findAllByYearOfReading(year);
-        return readings;
-    }
-
-    public List<Reading> getAllByMonthOfReading(int month) {
-        List<Reading> readings = readingRepository.findAllByMonthOfReading(month);
-        return readings;
-    }
-
 }

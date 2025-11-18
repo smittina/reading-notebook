@@ -18,6 +18,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Reading Entity
+ */
 @Entity
 @Table(name = "reading")
 @AllArgsConstructor

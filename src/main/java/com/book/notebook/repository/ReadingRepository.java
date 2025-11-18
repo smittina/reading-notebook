@@ -7,11 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import com.book.notebook.entity.Reading;
 
+/**
+ * Reading Repository
+ */
 @Repository
 public interface ReadingRepository extends JpaRepository<Reading, Long> {
 
     List<Reading> findAllByYearOfReading(int yearOfReading);
 
-    List<Reading> findAllByMonthOfReading(int monthOfReading);
+    List<Reading> findAllByYearOfReadingAndMonthOfReading(int yearOfReading, int monthOfReading);
 
 }
