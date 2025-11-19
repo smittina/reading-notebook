@@ -65,7 +65,7 @@ public class ReadingService {
     public Map<Integer, Long> getAllYearsOfReadings() {
         Map<Integer, Long> readingsByYears = new HashMap<>();
         List<Reading> readings = getAll();
-        List<Integer> uniqueAllYearsOfReading = new ArrayList<>();
+        List<Integer> uniqueAllYearsOfReading;
         if (readings != null) {
             uniqueAllYearsOfReading = readings.stream()
                 .map(Reading::getYearOfReading)
@@ -90,7 +90,7 @@ public class ReadingService {
     public Map<Integer, Long> getAllMonthsOfReadingsByYear(int year) {
         Map<Integer, Long> readingsByMonths = initializeMonthsOfReadings();
         List<Reading> readingsOfYear = getAllByYearOfReading(year);
-        List<Integer> uniqueAllMonthsOfReading = new ArrayList<>();
+        List<Integer> uniqueAllMonthsOfReading;
         if (readingsOfYear != null) {
             uniqueAllMonthsOfReading = readingsOfYear.stream()
             .map(Reading::getMonthOfReading)
