@@ -1,6 +1,7 @@
 package com.book.notebook.controller;
 
 import com.book.notebook.entity.Reading;
+import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,11 @@ public class ReadingController {
     @GetMapping("/readings/reading-detail/{readingId}")
     public ReadingDetail getReadingDetail(@PathVariable Long readingId) {
         return readingService.getReadingDetail(readingId);
+    }
+
+    @GetMapping("/readings/form-information")
+    public FormInformation getFormInformation() {
+        return readingService.getFormInformation();
     }
 
 }

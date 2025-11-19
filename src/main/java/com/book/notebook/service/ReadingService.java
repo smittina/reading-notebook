@@ -3,6 +3,7 @@ package com.book.notebook.service;
 import java.util.*;
 
 import com.book.notebook.entity.*;
+import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import com.book.notebook.constant.ReadingConstant;
 import com.book.notebook.repository.ReadingRepository;
 
 /**
- * Service linked to Reading Repository
+ * Service linked to Reading Repository and other services
  */
 @Service
 public class ReadingService {
@@ -120,6 +121,11 @@ public class ReadingService {
         return months;
     }
 
+    /**
+     * Get Reading detail about a specific book
+     * @param readingId reading id in database
+     * @return reading detail contains information about book, author, genres, tropes and quotations
+     */
     public ReadingDetail getReadingDetail(Long readingId) {
         // Get Reading
             Optional<Reading> optionalReading = readingRepository.findById(readingId);
@@ -127,7 +133,7 @@ public class ReadingService {
             // Get Book
             Book book = bookService.getBookById(readingId);
             // Get Author
-            Author author = authorService.getById(book.getIdAuthor());
+            Author author = authorService.getAuthorById(book.getIdAuthor());
             // Get Genre
             List<Genre> genres = genreService.getAllByIdBook(optionalReading.get().getIdBook());
             // Get Trope
@@ -138,7 +144,19 @@ public class ReadingService {
             // Create BookDetails
             return new ReadingDetail(optionalReading.get(), book, author, genres, tropes, quotations);
         }
-
         return null;
+    }
+
+    public FormInformation getFormInformation() {
+        // Get all unique books
+        List<Book> books = bookService.getAllUniqueBooks();
+        // Get all unique authors
+        List<Author> authors = authorService.getAllUniqueAuthors();
+        // Get list of unique genres
+        List<String> genres = genreService.getAllUniqueGenres();
+        // Get list of unique tropes
+        List<String> tropes = tropeService.getAllUniqueTropes();
+
+        return new FormInformation(books, authors, genres, tropes);
     }
 }

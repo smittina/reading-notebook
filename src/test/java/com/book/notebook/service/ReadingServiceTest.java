@@ -1,7 +1,6 @@
 package com.book.notebook.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
@@ -11,9 +10,9 @@ import java.time.Month;
 import java.util.*;
 
 import com.book.notebook.entity.*;
+import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,13 +27,13 @@ import com.book.notebook.repository.ReadingRepository;
 @ExtendWith(MockitoExtension.class)
 public class ReadingServiceTest {
 
-    private static final List<Reading> readings = new ArrayList<>();
-    private static final List<Reading> readingsByYear = new ArrayList<>();
-    private static Book book = null;
-    private static Author author = null;
-    private static final List<Genre> genres = new ArrayList<>();
-    private static final List<Trope> tropes = new ArrayList<>();
-    private static final List<Quotation> quotations = new ArrayList<>();
+    List<Reading> readings;
+    List<Reading> readingsByYear;
+    Book book = null;
+    Author author = null;
+    List<Genre> genres;
+    List<Trope> tropes;
+    List<Quotation> quotations;
 
     @Mock
     private ReadingRepository readingRepository;
@@ -52,60 +51,61 @@ public class ReadingServiceTest {
     @InjectMocks
     private ReadingService serviceTest;
 
-    @BeforeAll
-    static void init() {
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
 
         // Readings
         Reading reading1 = new Reading(
                 1L,
                 1L,
-            2023,
-            9,
-            LocalDateTime.of(2023, Month.SEPTEMBER, 25, 0, 0, 0),
-            LocalDateTime.of(2023, Month.SEPTEMBER, 27, 0, 0, 0),
-            StatusOfReading.FINISHED,
-            TypeOfReading.HARDBACK,
-            408,
-            408);
+                2023,
+                9,
+                LocalDateTime.of(2023, Month.SEPTEMBER, 25, 0, 0, 0),
+                LocalDateTime.of(2023, Month.SEPTEMBER, 27, 0, 0, 0),
+                StatusOfReading.FINISHED,
+                TypeOfReading.HARDBACK,
+                408,
+                408);
 
         Reading reading2 = new Reading(
                 2L,
                 2L,
-            2023,
-            10,
-            LocalDateTime.of(2023, Month.OCTOBER, 1, 0, 0, 0),
-            LocalDateTime.of(2023, Month.OCTOBER, 3, 0, 0, 0),
-            StatusOfReading.FINISHED,
-            TypeOfReading.HARDBACK,
-            456,
-            456);
-        
+                2023,
+                10,
+                LocalDateTime.of(2023, Month.OCTOBER, 1, 0, 0, 0),
+                LocalDateTime.of(2023, Month.OCTOBER, 3, 0, 0, 0),
+                StatusOfReading.FINISHED,
+                TypeOfReading.HARDBACK,
+                456,
+                456);
+
         Reading reading3 = new Reading(
                 3L,
                 3L,
-            2024,
-            3,
-            LocalDateTime.of(2024, Month.MARCH, 1, 0, 0, 0),
-            LocalDateTime.of(2024, Month.MARCH, 3, 0, 0, 0),
-            StatusOfReading.FINISHED,
-            TypeOfReading.HARDBACK,
-            552,
-            552);
+                2024,
+                3,
+                LocalDateTime.of(2024, Month.MARCH, 1, 0, 0, 0),
+                LocalDateTime.of(2024, Month.MARCH, 3, 0, 0, 0),
+                StatusOfReading.FINISHED,
+                TypeOfReading.HARDBACK,
+                552,
+                552);
 
         Reading reading4 = new Reading(
                 4L,
                 4L,
-            2025,
-            1,
-            LocalDateTime.of(2025, Month.JANUARY, 1, 0, 0, 0),
-            LocalDateTime.of(2025, Month.JANUARY, 3, 0, 0, 0),
-            StatusOfReading.FINISHED,
-            TypeOfReading.HARDBACK,
-            456,
-            456);
-        
-        readings.addAll(Arrays.asList(reading1, reading2, reading3, reading4));
-        readingsByYear.addAll(Arrays.asList(reading1, reading2));
+                2025,
+                1,
+                LocalDateTime.of(2025, Month.JANUARY, 1, 0, 0, 0),
+                LocalDateTime.of(2025, Month.JANUARY, 3, 0, 0, 0),
+                StatusOfReading.FINISHED,
+                TypeOfReading.HARDBACK,
+                456,
+                456);
+
+        readings = new ArrayList<>(Arrays.asList(reading1, reading2, reading3, reading4));
+        readingsByYear= new ArrayList<>(Arrays.asList(reading1, reading2));
 
         // BookDetail
         book = new Book(
@@ -119,23 +119,23 @@ public class ReadingServiceTest {
                 1
         );
         author = new Author(
-               1L,
-               "Danielle L. Jensen"
+                1L,
+                "Danielle L. Jensen"
         );
         Genre genre1 = new Genre(
-          1L,
-          "Fantasy",
-          1L
+                1L,
+                "Fantasy",
+                1L
         );
         Genre genre2 = new Genre(
-          2L,
-          "Romantasy",
-          1L
+                2L,
+                "Romantasy",
+                1L
         );
         Trope trope1 = new Trope(
-               1L,
-               "Mariage arrangé",
-               1L
+                1L,
+                "Mariage arrangé",
+                1L
         );
         Trope trope2 = new Trope(
                 2L,
@@ -147,14 +147,10 @@ public class ReadingServiceTest {
                 "À présent chaque victoire, chaque défaite, chaque caresse ou chaque bataille… tout cela n’appartiendrait qu’à elle. Elle serait maîtresse de son destin, comme elle était maîtresse de cet instant.",
                 1L
         );
-        genres.addAll(Arrays.asList(genre1, genre2));
-        tropes.addAll(Arrays.asList(trope1, trope2));
+        genres = new ArrayList<>(Arrays.asList(genre1, genre2));
+        tropes = new ArrayList<>(Arrays.asList(trope1, trope2));
+        quotations = new ArrayList<>();
         quotations.add(quotation1);
-    }
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -286,7 +282,7 @@ public class ReadingServiceTest {
 
         doReturn(readingOptional).when(readingRepository).findById(anyLong());
         doReturn(book).when(bookService).getBookById(anyLong());
-        doReturn(author).when(authorService).getById(anyLong());
+        doReturn(author).when(authorService).getAuthorById(anyLong());
         doReturn(genres).when(genreService).getAllByIdBook(anyLong());
         doReturn(tropes).when(tropeService).getTropeByBookId(anyLong());
         doReturn(quotations).when(quotationService).getAllByBookId(anyLong());
@@ -332,5 +328,53 @@ public class ReadingServiceTest {
 
         // then
         assertNull(result);
+    }
+
+    @Test
+    public void getFormInformationTest() {
+        // given
+        Book book1 = new Book();
+        book1.setId(1L);
+        book1.setTitle("Book 1");
+
+        Book book2 = new Book();
+        book2.setId(2L);
+        book2.setTitle("Book 2");
+
+        Book book3 = new Book();
+        book3.setId(3L);
+        book3.setTitle("Book 3");
+
+        List<Book> books = Arrays.asList(book1, book2, book3);
+
+        Author author1 = new Author(1L, "Author 1");
+        Author author2 = new Author(2L, "Author 2");
+        Author author3 = new Author(3L, "Author 3");
+        Author  author4 = new Author(4L, "Author 4");
+
+        List<Author> authors = Arrays.asList(author1, author2, author3, author4);
+
+        List<String> genres = Arrays.asList("Genre 1", "Genre 2", "Genre 3", "Genre 4", "Genre 5");
+        List<String> tropes = Arrays.asList("Trope 1", "Trope 2", "Trope 3");
+
+        doReturn(books).when(bookService).getAllUniqueBooks();
+        doReturn(authors).when(authorService).getAllUniqueAuthors();
+        doReturn(genres).when(genreService).getAllUniqueGenres();
+        doReturn(tropes).when(tropeService).getAllUniqueTropes();
+
+        // when
+        FormInformation result = serviceTest.getFormInformation();
+
+        // then
+        assertNotNull(result.getBooks());
+        assertNotNull(result.getAuthors());
+        assertNotNull(result.getGenres());
+        assertNotNull(result.getTropes());
+
+        assertEquals(3, result.getBooks().size());
+        assertEquals(4, result.getAuthors().size());
+        assertEquals(5, result.getGenres().size());
+        assertEquals(3, result.getTropes().size());
+
     }
 }
