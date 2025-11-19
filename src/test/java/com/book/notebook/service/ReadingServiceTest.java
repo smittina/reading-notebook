@@ -1,28 +1,21 @@
 package com.book.notebook.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.*;
 
 import com.book.notebook.entity.*;
-import com.book.notebook.model.BookDetail;
+import com.book.notebook.model.ReadingDetail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -156,7 +149,7 @@ public class ReadingServiceTest {
         );
         genres.addAll(Arrays.asList(genre1, genre2));
         tropes.addAll(Arrays.asList(trope1, trope2));
-        quotations.addAll(Arrays.asList(quotation1));
+        quotations.add(quotation1);
     }
 
     @BeforeEach
@@ -189,15 +182,13 @@ public class ReadingServiceTest {
     @Test
     public void getAllYearsOfReadingsWhenNoReadingsFoundTest() {
         // given
-        Map<Integer,Long> expected = new HashMap<>();
-
         doReturn(null).when(readingRepository).findAll();
 
         // when
         Map<Integer, Long> result = serviceTest.getAllYearsOfReadings();
 
         // then
-        assertEquals(expected.size(), result.size());
+        assertEquals(0, result.size());
     }
 
     @Test
@@ -281,9 +272,9 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getBookDetailsTest() {
+    public void getReadingDetailsTest() {
         // given
-        BookDetail expected = new BookDetail(
+        ReadingDetail expected = new ReadingDetail(
                 readings.getFirst(),
                 book,
                 author,
@@ -291,7 +282,9 @@ public class ReadingServiceTest {
                 tropes,
                 quotations
         );
+        Optional<Reading> readingOptional = Optional.of(readings.getFirst());
 
+        doReturn(readingOptional).when(readingRepository).findById(anyLong());
         doReturn(book).when(bookService).getBookById(anyLong());
         doReturn(author).when(authorService).getById(anyLong());
         doReturn(genres).when(genreService).getAllByIdBook(anyLong());
@@ -299,7 +292,7 @@ public class ReadingServiceTest {
         doReturn(quotations).when(quotationService).getAllByBookId(anyLong());
 
         // when
-        BookDetail result = serviceTest.getBookDetails(readings.getFirst());
+        ReadingDetail result = serviceTest.getReadingDetail(1L);
 
         // then
         assertEquals(expected.getTitle(), result.getTitle());
@@ -324,22 +317,20 @@ public class ReadingServiceTest {
         assertEquals(expected.getFinished(), result.getFinished());
         assertEquals(expected.getQuotations().size(), result.getQuotations().size());
         if (!result.getQuotations().isEmpty()) {
-            assertEquals(expected.getQuotations().get(0), result.getQuotations().get(0));
+            assertEquals(expected.getQuotations().getFirst(), result.getQuotations().getFirst());
         }
         assertEquals(expected.getCurrentPage(), result.getCurrentPage());
     }
 
     @Test
-    public void getBookDetailsWhenBookIsNullTest() {
+    public void getReadingDetailsWhenReadingIsNullTest() {
         // given
-        BookDetail expected = null;
-
-        doReturn(null).when(bookService).getBookById(anyLong());
+        doReturn(Optional.empty()).when(readingRepository).findById(anyLong());
 
         // when
-        BookDetail result = serviceTest.getBookDetails(readings.getFirst());
+        ReadingDetail result = serviceTest.getReadingDetail(1L);
 
         // then
-        assertEquals(expected, result);
+        assertNull(result);
     }
 }

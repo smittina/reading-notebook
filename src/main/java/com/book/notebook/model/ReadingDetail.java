@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Model for BookDetail
+ * Model for ReadingDetail
  */
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookDetail {
+public class ReadingDetail {
 
     // General
     private String title;
@@ -35,12 +35,12 @@ public class BookDetail {
     private List<String> quotations;
     private int currentPage;
 
-    public BookDetail(Reading reading,
-                      Book book,
-                      Author author,
-                      List<Genre> genres,
-                      List<Trope> tropes,
-                      List<Quotation> quotations) {
+    public ReadingDetail(Reading reading,
+                         Book book,
+                         Author author,
+                         List<Genre> genres,
+                         List<Trope> tropes,
+                         List<Quotation> quotations) {
 
         // General
         this.title = book.getTitle();

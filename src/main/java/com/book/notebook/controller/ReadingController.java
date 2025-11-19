@@ -1,13 +1,11 @@
 package com.book.notebook.controller;
 
 import com.book.notebook.entity.Reading;
+import com.book.notebook.model.ReadingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.book.notebook.service.ReadingService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +33,11 @@ public class ReadingController {
     @ResponseBody
     public List<Reading> getReadingsByYearAndMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
         return readingService.getAllByMonthAndYearOfReading(year, month);
+    }
+
+    @GetMapping("/readings/reading-detail/{readingId}")
+    public ReadingDetail getReadingDetail(@PathVariable Long readingId) {
+        return readingService.getReadingDetail(readingId);
     }
 
 }

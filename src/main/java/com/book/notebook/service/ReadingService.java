@@ -1,13 +1,9 @@
 package com.book.notebook.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import com.book.notebook.entity.*;
-import com.book.notebook.model.BookDetail;
+import com.book.notebook.model.ReadingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -124,22 +120,23 @@ public class ReadingService {
         return months;
     }
 
-    public BookDetail getBookDetails(Reading reading) {
-
-        // Get Book
-        Book book = bookService.getBookById(reading.getIdBook());
-        if (book != null) {
+    public ReadingDetail getReadingDetail(Long readingId) {
+        // Get Reading
+            Optional<Reading> optionalReading = readingRepository.findById(readingId);
+        if (optionalReading.isPresent()) {
+            // Get Book
+            Book book = bookService.getBookById(readingId);
             // Get Author
             Author author = authorService.getById(book.getIdAuthor());
             // Get Genre
-            List<Genre> genres = genreService.getAllByIdBook(reading.getIdBook());
+            List<Genre> genres = genreService.getAllByIdBook(optionalReading.get().getIdBook());
             // Get Trope
-            List<Trope> tropes = tropeService.getTropeByBookId(reading.getIdBook());
+            List<Trope> tropes = tropeService.getTropeByBookId(optionalReading.get().getIdBook());
             // Get Quotation
-            List<Quotation> quotations = quotationService.getAllByBookId(reading.getIdBook());
+            List<Quotation> quotations = quotationService.getAllByBookId(optionalReading.get().getIdBook());
 
             // Create BookDetails
-            return new BookDetail(reading, book, author, genres, tropes, quotations);
+            return new ReadingDetail(optionalReading.get(), book, author, genres, tropes, quotations);
         }
 
         return null;

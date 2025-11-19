@@ -1,6 +1,7 @@
 package com.book.notebook.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,8 @@ import com.book.notebook.entity.Reading;
  */
 @Repository
 public interface ReadingRepository extends JpaRepository<Reading, Long> {
+
+    Optional<Reading> findById(Long id);
 
     List<Reading> findAllByYearOfReading(int yearOfReading);
 
