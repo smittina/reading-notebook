@@ -62,4 +62,7 @@ public class Reading {
     @Column(name = "current_page", nullable = true)
     private int currentPage;
 
+    @Column(name = "rating")
+    private float rating;
+
 }

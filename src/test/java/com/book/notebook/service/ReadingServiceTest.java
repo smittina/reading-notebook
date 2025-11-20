@@ -66,7 +66,8 @@ public class ReadingServiceTest {
                 StatusOfReading.FINISHED,
                 TypeOfReading.HARDBACK,
                 408,
-                408);
+                408,
+                5F);
 
         Reading reading2 = new Reading(
                 2L,
@@ -78,7 +79,8 @@ public class ReadingServiceTest {
                 StatusOfReading.FINISHED,
                 TypeOfReading.HARDBACK,
                 456,
-                456);
+                456,
+                5F);
 
         Reading reading3 = new Reading(
                 3L,
@@ -90,7 +92,8 @@ public class ReadingServiceTest {
                 StatusOfReading.FINISHED,
                 TypeOfReading.HARDBACK,
                 552,
-                552);
+                552,
+                5F);
 
         Reading reading4 = new Reading(
                 4L,
@@ -102,7 +105,8 @@ public class ReadingServiceTest {
                 StatusOfReading.FINISHED,
                 TypeOfReading.HARDBACK,
                 456,
-                456);
+                456,
+                5F);
 
         readings = new ArrayList<>(Arrays.asList(reading1, reading2, reading3, reading4));
         readingsByYear= new ArrayList<>(Arrays.asList(reading1, reading2));

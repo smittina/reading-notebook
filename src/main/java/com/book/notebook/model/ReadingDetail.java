@@ -34,6 +34,7 @@ public class ReadingDetail {
     private LocalDateTime finished;
     private List<String> quotations;
     private int currentPage;
+    private float rating;
 
     public ReadingDetail(Reading reading,
                          Book book,
@@ -58,6 +59,7 @@ public class ReadingDetail {
         if (status != StatusOfReading.IN_PROGRESS.getStatus()) {
             this.starting = reading.getStarting();
             this.finished = reading.getFinished();
+            this.rating = reading.getRating();
         } else {
             this.starting = reading.getStarting();
             this.currentPage = reading.getCurrentPage();
