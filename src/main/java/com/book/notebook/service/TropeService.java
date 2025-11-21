@@ -1,5 +1,6 @@
 package com.book.notebook.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,23 @@ public class TropeService {
                 .map(Trope::getTitle)
                 .distinct()
                 .toList();
+    }
+
+    /**
+     * Save a list of new Trope Entities in database
+     * @param tropeTitle trope name
+     * @param idBook book Id
+     * @return list of new tropes saved
+     */
+    public List<Trope> createNewTropes(List<String> tropeTitle, Long idBook) {
+        List<Trope> newTropes = new ArrayList<>();
+        for (String tropeName : tropeTitle) {
+            Trope trope = new Trope();
+            trope.setTitle(tropeName);
+            trope.setBookId(idBook);
+            newTropes.add(trope);
+        }
+        return tropeRepository.saveAll(newTropes);
     }
 
 }

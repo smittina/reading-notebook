@@ -1,6 +1,7 @@
 package com.book.notebook.service;
 
 import com.book.notebook.entity.Book;
+import com.book.notebook.model.ReadingDetail;
 import com.book.notebook.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 
@@ -104,5 +106,19 @@ public class BookServiceTest {
             assertEquals(expected.get(1).getTitle(), result.get(1).getTitle());
             assertEquals(expected.get(2).getTitle(), result.get(2).getTitle());
         }
+    }
+
+    @Test
+    void createBookTest(){
+        // given
+        Book expected = new Book();
+        doReturn(expected).when(bookRepository).save(any(Book.class));
+
+        // when
+        Book result = serviceTest.createBook(new ReadingDetail());
+
+        // then
+        assertInstanceOf(Book.class, result);
+        assertEquals(expected, result);
     }
 }

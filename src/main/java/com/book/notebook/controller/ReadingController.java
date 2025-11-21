@@ -13,25 +13,23 @@ import java.util.Map;
 
 
 @RestController
+@ResponseBody
 public class ReadingController {
 
     @Autowired
     private ReadingService readingService;
 
     @GetMapping("/readings")
-    @ResponseBody
     public Map<Integer, Long> getReadings() {
         return readingService.getAllYearsOfReadings();
     }
 
     @GetMapping("/readings/{year}")
-    @ResponseBody
     public List<Reading> getReadingsByYear(@PathVariable("year") int year) {
         return readingService.getAllByYearOfReading(year);
     }
 
     @GetMapping("/readings/{year}/{month}")
-    @ResponseBody
     public List<Reading> getReadingsByYearAndMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
         return readingService.getAllByMonthAndYearOfReading(year, month);
     }
@@ -44,6 +42,11 @@ public class ReadingController {
     @GetMapping("/readings/form-information")
     public FormInformation getFormInformation() {
         return readingService.getFormInformation();
+    }
+
+    @PostMapping("/readings/create")
+    public Reading createReading(@RequestBody ReadingDetail readingDetail) {
+        return readingService.createNewReading(readingDetail);
     }
 
 }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 
@@ -32,7 +33,7 @@ public class GenreServiceTest {
     }
 
     @Test
-    public void getAllByIdBookTest() {
+   void getAllByIdBookTest() {
         // given
         Genre genre1 = new Genre(1L, "Genre1", 1L);
         Genre genre2 = new Genre(2L, "Genre2", 2L);
@@ -54,7 +55,7 @@ public class GenreServiceTest {
     }
 
     @Test
-    public void getAllUniqueGenresTest() {
+    void getAllUniqueGenresTest() {
         // given
         Genre genre1 = new Genre(1L, "Genre1", 1L);
         Genre genre2 = new Genre(2L, "Genre1", 2L);
@@ -77,5 +78,24 @@ public class GenreServiceTest {
             assertEquals(expected.get(1), result.get(1));
             assertEquals(expected.get(2), result.get(2));
         }
+    }
+
+    @Test
+    void createNewGenreTest() {
+        // given
+        List<String> genreList = Arrays.asList("Genre 1", "Genre 2", "Genre 3");
+
+        Genre genre1 = new Genre(1L, "Genre1", 1L);
+        Genre genre2 = new Genre(2L, "Genre2", 1L);
+        Genre genre3 = new Genre(3L, "Genre3", 1L);
+
+        List<Genre> expected = Arrays.asList(genre1, genre2, genre3);
+        doReturn(expected).when(genreRepository).saveAll(anyList());
+
+        // when
+        List<Genre> result = serviceTest.createNewGenres(genreList, 1L);
+
+        // then
+        assertEquals(expected, result);
     }
 }

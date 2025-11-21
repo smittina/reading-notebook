@@ -14,4 +14,13 @@ public enum StatusOfReading {
     public String getStatus() {
         return status;
     }
+
+    public static StatusOfReading getValue(String status) {
+        return switch (status) {
+            case "en cours" -> IN_PROGRESS;
+            case "abandonné" -> DNF;
+            case "terminé" -> FINISHED;
+            default -> throw new IllegalStateException("Unexpected value: " + status);
+        };
+    }
 }

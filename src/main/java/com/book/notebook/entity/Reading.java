@@ -30,36 +30,36 @@ import lombok.Setter;
 public class Reading {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_book", nullable = false)
-    private Long idBook;
+    @Column(name = "book_id", nullable = false)
+    private Long bookId;
 
-    @Column(name = "year_of_reading", nullable = false)
+    @Column(name = "year_of_reading")
     private int yearOfReading;
 
-    @Column(name = "month_of_reading", nullable = false)
+    @Column(name = "month_of_reading")
     private int monthOfReading;
 
     @Column(name = "starting", nullable = false)
     private LocalDateTime starting;
 
-    @Column(name = "finished", nullable = true)
+    @Column(name = "finished")
     private LocalDateTime finished;
 
-    @Column(name = "status_of_reading", nullable = true)
+    @Column(name = "status_of_reading", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusOfReading statusOfReading;
 
-    @Column(name = "type_of_reading", nullable = true)
+    @Column(name = "type_of_reading", nullable = false)
     @Enumerated(EnumType.STRING)
     private TypeOfReading typeOfReading;
 
-    @Column(name = "page_number", nullable = true)
+    @Column(name = "page_number")
     private int pageNumber;
 
-    @Column(name = "current_page", nullable = true)
+    @Column(name = "current_page")
     private int currentPage;
 
     @Column(name = "rating")

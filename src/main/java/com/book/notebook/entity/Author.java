@@ -20,10 +20,10 @@ import lombok.Setter;
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fullname", nullable = true)
+    @Column(name = "fullname", nullable = false)
     private String fullname;
     
 }

@@ -3,6 +3,8 @@ package com.book.notebook.service;
 import java.util.*;
 
 import com.book.notebook.entity.*;
+import com.book.notebook.enumeration.StatusOfReading;
+import com.book.notebook.enumeration.TypeOfReading;
 import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class ReadingService {
     private GenreService genreService;
     @Autowired
     private QuotationService quotationService;
+
+    // ------------------------------- DATABASE OPERATIONS --------------------------------- //
 
     /**
      * Get all readings without worrying about year of reading
@@ -121,6 +125,8 @@ public class ReadingService {
         return months;
     }
 
+    // -------------------------------------- READING DETAILS ------------------------------------ //
+
     /**
      * Get Reading detail about a specific book
      * @param readingId reading id in database
@@ -131,15 +137,15 @@ public class ReadingService {
             Optional<Reading> optionalReading = readingRepository.findById(readingId);
         if (optionalReading.isPresent()) {
             // Get Book
-            Book book = bookService.getBookById(readingId);
+            Book book = bookService.getBookById(optionalReading.get().getBookId());
             // Get Author
-            Author author = authorService.getAuthorById(book.getIdAuthor());
+            Author author = authorService.getAuthorById(book.getAuthorId());
             // Get Genre
-            List<Genre> genres = genreService.getAllByIdBook(optionalReading.get().getIdBook());
+            List<Genre> genres = genreService.getAllByIdBook(optionalReading.get().getBookId());
             // Get Trope
-            List<Trope> tropes = tropeService.getTropeByBookId(optionalReading.get().getIdBook());
+            List<Trope> tropes = tropeService.getTropeByBookId(optionalReading.get().getBookId());
             // Get Quotation
-            List<Quotation> quotations = quotationService.getAllByBookId(optionalReading.get().getIdBook());
+            List<Quotation> quotations = quotationService.getAllByBookId(optionalReading.get().getBookId());
 
             // Create BookDetails
             return new ReadingDetail(optionalReading.get(), book, author, genres, tropes, quotations);
@@ -147,6 +153,12 @@ public class ReadingService {
         return null;
     }
 
+    // --------------------------------------- FORM INFORMATIONS -------------------------------------------- //
+
+    /**
+     * Get all informations necessary to create new reading or update an existent reading
+     * @return form informations
+     */
     public FormInformation getFormInformation() {
         // Get all unique books
         List<Book> books = bookService.getAllUniqueBooks();
@@ -159,4 +171,59 @@ public class ReadingService {
 
         return new FormInformation(books, authors, genres, tropes);
     }
+
+    // ----------------------- CREATE AND UPDATE ENTRANCE IN REPOSITORIES ------------------------------------ //
+
+    /**
+     * Insert new Reading Entity in database
+     * @param readingDetail data relative to new reading
+     * @return new reading Entity
+     */
+    public Reading createNewReading(ReadingDetail readingDetail) {
+        boolean isReReading = readingDetail.getIdAuthor() == 0 && readingDetail.getBookId() == 0;
+        if(isReReading) {
+            // AUTHOR
+            Author newAuthor = authorService.createAuthor(readingDetail.getAuthorName());
+            readingDetail.setIdAuthor(newAuthor.getId());
+            // BOOK
+            Book newBook = bookService.createBook(readingDetail);
+            readingDetail.setBookId(newBook.getId());
+            // GENRE
+            genreService.createNewGenres(readingDetail.getGenres(), readingDetail.getBookId());
+            // TROPE
+            tropeService.createNewTropes(readingDetail.getTropes(), readingDetail.getBookId());
+        }
+        // QUOTATION
+        quotationService.createNewQuotations(readingDetail.getQuotations(), readingDetail.getBookId());
+        // READING
+        Reading newReading = constructReading(readingDetail);
+        return readingRepository.save(newReading);
+    }
+
+    // --------------------------------- OPERATIONS --------------------------------- //
+
+    /**
+     * Construct new Reading Entity
+     * @param detail reading informations necessary to construct the entity
+     * @return the new Reading Entity
+     */
+    public Reading constructReading(ReadingDetail detail) {
+        Reading newReading = new Reading();
+        newReading.setBookId(detail.getBookId());
+        if(detail.getFinished() != null) {
+            newReading.setYearOfReading(detail.getFinished().getYear());
+            newReading.setMonthOfReading(detail.getFinished().getMonth().getValue());
+        }
+        newReading.setStarting(detail.getStarting());
+        newReading.setFinished(detail.getFinished());
+        newReading.setStatusOfReading(StatusOfReading.getValue(detail.getStatus()));
+        newReading.setTypeOfReading(TypeOfReading.getValue(detail.getTypeOfReading()));
+        newReading.setPageNumber(detail.getPageNumber());
+        newReading.setCurrentPage(detail.getCurrentPage());
+        newReading.setRating(detail.getRating());
+
+        return  newReading;
+    }
+
+
 }

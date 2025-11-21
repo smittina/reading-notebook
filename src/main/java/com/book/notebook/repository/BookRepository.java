@@ -11,6 +11,6 @@ import com.book.notebook.entity.Book;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>{
 
-    List<Book> findAllByIdAuthor(int idAuthor);
+    List<Book> findAllByAuthorId(int authorId);
 
 }

@@ -1,10 +1,10 @@
 package com.book.notebook.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
@@ -158,7 +158,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getAllYearsOfReadingsTest() {
+    void getAllYearsOfReadingsTest() {
         // given
         Map<Integer,Long> expected = new HashMap<>();
         expected.put(2023, 2L);
@@ -180,7 +180,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getAllYearsOfReadingsWhenNoReadingsFoundTest() {
+    void getAllYearsOfReadingsWhenNoReadingsFoundTest() {
         // given
         doReturn(null).when(readingRepository).findAll();
 
@@ -192,7 +192,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getAllMonthsOfReadingsByYearTest() {
+    void getAllMonthsOfReadingsByYearTest() {
         // given
         Map<Integer,Long> expected = new HashMap<>();
         expected.put(1, 0L);
@@ -232,7 +232,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getAllMonthsOfReadingsByYearWhenNoReadingsFoundTest() {
+    void getAllMonthsOfReadingsByYearWhenNoReadingsFoundTest() {
         // given
         Map<Integer,Long> expected = new HashMap<>();
         expected.put(1, 0L);
@@ -272,7 +272,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getReadingDetailsTest() {
+    void getReadingDetailsTest() {
         // given
         ReadingDetail expected = new ReadingDetail(
                 readings.getFirst(),
@@ -323,7 +323,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getReadingDetailsWhenReadingIsNullTest() {
+    void getReadingDetailsWhenReadingIsNullTest() {
         // given
         doReturn(Optional.empty()).when(readingRepository).findById(anyLong());
 
@@ -335,7 +335,7 @@ public class ReadingServiceTest {
     }
 
     @Test
-    public void getFormInformationTest() {
+    void getFormInformationTest() {
         // given
         Book book1 = new Book();
         book1.setId(1L);
@@ -381,4 +381,169 @@ public class ReadingServiceTest {
         assertEquals(3, result.getTropes().size());
 
     }
+
+    @Test
+    void constructReadingTest() {
+        // given
+        ReadingDetail detail = new ReadingDetail();
+        detail.setBookId(1L);
+        detail.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
+        detail.setFinished(LocalDate.of(2025, Month.FEBRUARY, 1).atStartOfDay());
+        detail.setStatus("terminé");
+        detail.setTypeOfReading("relié");
+        detail.setPageNumber(450);
+        detail.setCurrentPage(450);
+        detail.setRating(4.75F);
+
+        Reading expected = new Reading();
+        expected.setBookId(1L);
+        expected.setYearOfReading(2025);
+        expected.setMonthOfReading(2);
+        expected.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
+        expected.setFinished(LocalDate.of(2025, Month.FEBRUARY, 1).atStartOfDay());
+        expected.setStatusOfReading(StatusOfReading.FINISHED);
+        expected.setTypeOfReading(TypeOfReading.HARDBACK);
+        expected.setPageNumber(450);
+        expected.setCurrentPage(450);
+        expected.setRating(4.75F);
+
+        // when
+        Reading result =  serviceTest.constructReading(detail);
+
+        // then
+        assertNotNull(result);
+        assertEquals(expected.getBookId(), result.getBookId());
+        assertEquals(expected.getYearOfReading(), result.getYearOfReading());
+        assertEquals(expected.getMonthOfReading(), result.getMonthOfReading());
+        assertEquals(expected.getStarting(), result.getStarting());
+        assertEquals(expected.getFinished(), result.getFinished());
+        assertEquals(expected.getStatusOfReading(), result.getStatusOfReading());
+        assertEquals(expected.getTypeOfReading(), result.getTypeOfReading());
+        assertEquals(expected.getPageNumber(), result.getPageNumber());
+        assertEquals(expected.getCurrentPage(), result.getCurrentPage());
+        assertEquals(expected.getRating(), result.getRating());
+    }
+
+    @Test
+    void creatingNewReadingTest() {
+        // given
+        ReadingDetail detail = new ReadingDetail();
+        detail.setBookId(0);
+        detail.setIdAuthor(0);
+        detail.setAuthorName("Author 1");
+        detail.setGenres(Arrays.asList("Genre 1", "Genre 2"));
+        detail.setTropes(Arrays.asList("Trope 1", "Trope 2"));
+        detail.setQuotations(Arrays.asList("Quotation 1", "Quotation 2"));
+        detail.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
+        detail.setFinished(LocalDate.of(2025, Month.FEBRUARY, 1).atStartOfDay());
+        detail.setStatus("terminé");
+        detail.setTypeOfReading("relié");
+        detail.setPageNumber(450);
+        detail.setCurrentPage(450);
+        detail.setRating(4.75F);
+
+        Author author1 = new Author(1L, "Author 1");
+        Book book1 = new Book();
+        book1.setId(1L);
+
+        doReturn(author1).when(authorService).createAuthor(anyString());
+        doReturn(book1).when(bookService).createBook(any(ReadingDetail.class));
+        doReturn(new ArrayList<>()).when(genreService).createNewGenres(anyList(), anyLong());
+        doReturn(new ArrayList<>()).when(tropeService).createNewTropes(anyList(), anyLong());
+        doReturn(new ArrayList<>()).when(quotationService).createNewQuotations(anyList(), anyLong());
+
+        Reading saveReading = new Reading();
+        doReturn(saveReading).when(readingRepository).save(any());
+
+        // when
+        Reading result = serviceTest.createNewReading(detail);
+
+        // then
+        verify(authorService, times(1)).createAuthor(anyString());
+        verify(bookService, times(1)).createBook(any(ReadingDetail.class));
+        verify(genreService, times(1)).createNewGenres(anyList(), anyLong());
+        verify(tropeService, times(1)).createNewTropes(anyList(), anyLong());
+        verify(quotationService, times(1)).createNewQuotations(anyList(), anyLong());
+        assertNotNull(result);
+        assertEquals(saveReading,  result);
+    }
+
+    @Test
+    void creatingNewReadingWhenIsReReadingTest() {
+        // given
+        ReadingDetail detail = new ReadingDetail();
+        detail.setBookId(1);
+        detail.setIdAuthor(1);
+        detail.setAuthorName("Author 1");
+        detail.setGenres(Arrays.asList("Genre 1", "Genre 2"));
+        detail.setTropes(Arrays.asList("Trope 1", "Trope 2"));
+        detail.setQuotations(Arrays.asList("Quotation 1", "Quotation 2"));
+        detail.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
+        detail.setFinished(LocalDate.of(2025, Month.FEBRUARY, 1).atStartOfDay());
+        detail.setStatus("terminé");
+        detail.setTypeOfReading("relié");
+        detail.setPageNumber(450);
+        detail.setCurrentPage(450);
+        detail.setRating(4.75F);
+
+        doReturn(new ArrayList<>()).when(quotationService).createNewQuotations(anyList(), anyLong());
+
+        Reading saveReading = new Reading();
+        doReturn(saveReading).when(readingRepository).save(any());
+
+        // when
+        Reading result = serviceTest.createNewReading(detail);
+
+        // then
+        verify(authorService, never()).createAuthor(anyString());
+        verify(bookService, never()).createBook(any(ReadingDetail.class));
+        verify(genreService, never()).createNewGenres(anyList(), anyLong());
+        verify(tropeService, never()).createNewTropes(anyList(), anyLong());
+        verify(quotationService, times(1)).createNewQuotations(anyList(), anyLong());
+        assertNotNull(result);
+        assertEquals(saveReading,  result);
+    }
+
+    @Test
+    void constructReadingWhenBookIsNotFinishedTest() {
+        // given
+        ReadingDetail detail = new ReadingDetail();
+        detail.setBookId(1L);
+        detail.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
+        detail.setFinished(null);
+        detail.setStatus("en cours");
+        detail.setTypeOfReading("e-book");
+        detail.setPageNumber(450);
+        detail.setCurrentPage(150);
+        detail.setRating(-1F);
+
+        Reading expected = new Reading();
+        expected.setBookId(1L);
+        expected.setYearOfReading(0);
+        expected.setMonthOfReading(0);
+        expected.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
+        expected.setFinished(null);
+        expected.setStatusOfReading(StatusOfReading.IN_PROGRESS);
+        expected.setTypeOfReading(TypeOfReading.EBOOK);
+        expected.setPageNumber(450);
+        expected.setCurrentPage(150);
+        expected.setRating(-1F);
+
+        // when
+        Reading result =  serviceTest.constructReading(detail);
+
+        // then
+        assertNotNull(result);
+        assertEquals(expected.getBookId(), result.getBookId());
+        assertEquals(expected.getYearOfReading(), result.getYearOfReading());
+        assertEquals(expected.getMonthOfReading(), result.getMonthOfReading());
+        assertEquals(expected.getStarting(), result.getStarting());
+        assertEquals(expected.getFinished(), result.getFinished());
+        assertEquals(expected.getStatusOfReading(), result.getStatusOfReading());
+        assertEquals(expected.getTypeOfReading(), result.getTypeOfReading());
+        assertEquals(expected.getPageNumber(), result.getPageNumber());
+        assertEquals(expected.getCurrentPage(), result.getCurrentPage());
+        assertEquals(expected.getRating(), result.getRating());
+    }
+
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 
@@ -33,7 +34,7 @@ public class AuthorServiceTest {
     }
 
     @Test
-    public void getAuthorByIdTest(){
+    void getAuthorByIdTest(){
         // given
         Author author = new Author(1L, "Name");
         Author expected = new Author(1L, "Name");
@@ -53,7 +54,7 @@ public class AuthorServiceTest {
     }
 
     @Test
-    public void getAuthorByIdWhenOptionIsNotPresentTest(){
+    void getAuthorByIdWhenOptionIsNotPresentTest(){
         // given
         Optional<Author> authorOptional =  Optional.empty();
 
@@ -67,7 +68,7 @@ public class AuthorServiceTest {
     }
 
     @Test
-    public void getAllUniqueAuthorsTest(){
+    void getAllUniqueAuthorsTest(){
         // given
         Author author1 = new Author(1L, "Name1");
         Author author2 = new Author(2L, "Name2");
@@ -92,5 +93,20 @@ public class AuthorServiceTest {
             assertEquals(expected.get(1).getFullname(), result.get(1).getFullname());
             assertEquals(expected.get(2).getFullname(), result.get(2).getFullname());
         }
+    }
+
+    @Test
+    void createAuthorTest(){
+        // given
+        Author expected = new Author(1L, "Name1");
+
+        doReturn(expected).when(authorRepository).save(any(Author.class));
+
+        // when
+        Author result = serviceTest.createAuthor("Name1");
+
+        // then
+        assertInstanceOf(Author.class, result);
+        assertEquals(expected, result);
     }
 }

@@ -32,4 +32,16 @@ public class AuthorService {
     public List<Author> getAllUniqueAuthors(){
         return authorRepository.findAll();
     }
+
+    /**
+     * Save a new Author Entity in database
+     * @param fullName author name
+     * @return new Author saved
+     */
+    public Author createAuthor(String fullName) {
+        Author newAuthor = new Author();
+        newAuthor.setFullname(fullName);
+
+        return authorRepository.save(newAuthor);
+    }
 }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 
@@ -32,7 +33,7 @@ public class TropeServiceTest {
     }
 
     @Test
-    public void getTropeByBookIdTest(){
+    void getTropeByBookIdTest(){
         // given
         Trope trope1 = new Trope(1L, "Trope1", 1L);
         Trope trope2 = new Trope(2L, "Trope2", 2L);
@@ -54,7 +55,7 @@ public class TropeServiceTest {
     }
 
     @Test
-    public void getAllUniqueTropeTest(){
+    void getAllUniqueTropeTest(){
         // given
         Trope trope1 = new Trope(1L, "Trope1", 1L);
         Trope trope2 = new Trope(2L, "Trope1", 2L);
@@ -78,5 +79,22 @@ public class TropeServiceTest {
             assertEquals(expected.get(2), result.get(2));
             assertEquals(expected.get(3), result.get(3));
         }
+    }
+
+    @Test
+    void createTropeTest(){
+        // given
+        List<String> tropeList =  Arrays.asList("Trope1", "Trope2");
+        Trope trope1 = new Trope(1L, "Trope1", 1L);
+        Trope trope2 = new Trope(2L, "Trope2", 1L);
+
+        List<Trope> expected = Arrays.asList(trope1, trope2);
+        doReturn(expected).when(tropeRepository).saveAll(anyList());
+
+        // when
+        List<Trope> result = serviceTest.createNewTropes(tropeList, 1L);
+
+        // then
+        assertEquals(expected, result);
     }
 }

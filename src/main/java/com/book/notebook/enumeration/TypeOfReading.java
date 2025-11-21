@@ -15,4 +15,14 @@ public enum TypeOfReading {
     public String getType() {
         return type;
     }
+
+    public static TypeOfReading getValue(String type) {
+        return switch (type) {
+            case "relié" -> HARDBACK;
+            case "broché" -> PAPERBACK;
+            case "livre audio" -> AUDIO;
+            case "e-book" -> EBOOK;
+            default -> throw new IllegalStateException("Unexpected value: " + type);
+        };
+    }
 }

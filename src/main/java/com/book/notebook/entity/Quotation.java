@@ -20,10 +20,10 @@ import lombok.Setter;
 public class Quotation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "quote_text", nullable = true)
+    @Column(name = "quote_text", nullable = false)
     private String quoteText;
 
     @Column(name = "book_id", nullable = false)

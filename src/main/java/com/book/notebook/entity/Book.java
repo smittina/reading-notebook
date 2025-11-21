@@ -20,28 +20,28 @@ import lombok.Setter;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_author", nullable = true)
-    private Long idAuthor;
+    @Column(name = "author_id", nullable = false)
+    private Long authorId;
 
-    @Column(name = "title", nullable = true)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "cover", nullable = true)
+    @Column(name = "cover")
     private byte[] cover;
 
-    @Column(name = "synopsis", nullable = true)
+    @Column(name = "synopsis")
     private String synopsis;
 
-    @Column(name = "saga", nullable = true)
+    @Column(name = "saga")
     private boolean saga;
 
-    @Column(name = "all_tome_published", nullable = true)
+    @Column(name = "all_tome_published")
     private boolean allTomePublished;
 
-    @Column(name = "number_of_tome", nullable = true)
+    @Column(name = "number_of_tome")
     private int numberOfTome;
 
 }

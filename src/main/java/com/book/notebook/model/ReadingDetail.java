@@ -18,23 +18,29 @@ import java.util.List;
 public class ReadingDetail {
 
     // General
+    private long bookId;
     private String title;
     private String authorName;
+    private long idAuthor;
     private byte[] cover;
     private String synopsis;
     private List<String> genres;
     private List<String> tropes;
     private int pageNumber;
     // Saga
+    private boolean saga;
+    private boolean allTomePublished;
     private int numberOfTome;
     // Reading infos
     private String status;
     private String typeOfReading;
     private LocalDateTime starting;
     private LocalDateTime finished;
-    private List<String> quotations;
     private int currentPage;
     private float rating;
+
+    // Quotations
+    private List<String> quotations;
 
     public ReadingDetail(Reading reading,
                          Book book,
@@ -45,13 +51,17 @@ public class ReadingDetail {
 
         // General
         this.title = book.getTitle();
+        this.bookId = book.getId();
         this.authorName = author.getFullname();
+        this.idAuthor = author.getId();
         this.cover = book.getCover();
         this.synopsis = book.getSynopsis();
         this.genres = genres.stream().map(Genre::getTitle).toList();
         this.tropes = tropes.stream().map(Trope::getTitle).toList();
         this.pageNumber = reading.getPageNumber();
         // Saga
+        this.saga = book.isSaga();
+        this.allTomePublished = book.isAllTomePublished();
         this.numberOfTome = book.getNumberOfTome();
         // Reading information
         this.status = reading.getStatusOfReading().getStatus();
@@ -64,6 +74,7 @@ public class ReadingDetail {
             this.starting = reading.getStarting();
             this.currentPage = reading.getCurrentPage();
         }
+        // Quotations
         this.quotations = quotations.stream().map(Quotation::getQuoteText).toList();
     }
 
