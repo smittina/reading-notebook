@@ -5,6 +5,7 @@ import java.util.*;
 import com.book.notebook.entity.*;
 import com.book.notebook.enumeration.StatusOfReading;
 import com.book.notebook.enumeration.TypeOfReading;
+import com.book.notebook.model.BookResume;
 import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,22 @@ public class ReadingService {
      */
     public List<Reading> getAllByYearOfReading(int year) {
         return readingRepository.findAllByYearOfReading(year);
+    }
+
+    /**
+     * Get all book resumes for a specific year
+     * @param year year selectged
+     * @return list of all book resumes for a specific year
+     */
+    public List<BookResume> getAllBookResumesByYear(int year) {
+        List<Reading> readings = getAllByYearOfReading(year);
+        List<BookResume> bookResumes = new ArrayList<>();
+        readings.forEach(reading -> {
+            Book book = bookService.getBookById(reading.getBookId());
+            Author author = authorService.getAuthorById(book.getAuthorId());
+            bookResumes.add(new BookResume(reading.getId(), book.getId(), author.getId(), book.getTitle(), author.getFullname(), reading.getRating()));
+        });
+        return bookResumes;
     }
 
     /**

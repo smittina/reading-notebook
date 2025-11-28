@@ -1,17 +1,20 @@
 package com.book.notebook.controller;
 
 import com.book.notebook.entity.Reading;
+import com.book.notebook.mapper.ReadingMapper;
+import com.book.notebook.model.BookResume;
 import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
+import com.book.notebook.model.YearDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.book.notebook.service.ReadingService;
 
 import java.util.List;
-import java.util.Map;
 
 
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @RestController
 @ResponseBody
 public class ReadingController {
@@ -20,13 +23,13 @@ public class ReadingController {
     private ReadingService readingService;
 
     @GetMapping("/readings")
-    public Map<Integer, Long> getReadings() {
-        return readingService.getAllYearsOfReadings();
+    public List<YearDetail> getReadings() {
+        return ReadingMapper.convertMapToYearDetailList(readingService.getAllYearsOfReadings());
     }
 
     @GetMapping("/readings/{year}")
-    public List<Reading> getReadingsByYear(@PathVariable("year") int year) {
-        return readingService.getAllByYearOfReading(year);
+    public List<BookResume> getReadingsByYear(@PathVariable("year") int year) {
+        return readingService.getAllBookResumesByYear(year);
     }
 
     @GetMapping("/readings/{year}/{month}")
