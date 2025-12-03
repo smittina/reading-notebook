@@ -32,7 +32,7 @@ public class Book {
     @Column(name = "cover")
     private byte[] cover;
 
-    @Column(name = "synopsis")
+    @Column(name = "synopsis", columnDefinition="text")
     private String synopsis;
 
     @Column(name = "saga")
