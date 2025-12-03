@@ -1,6 +1,5 @@
 package com.book.notebook.mapper;
 
-import com.book.notebook.entity.Reading;
 import com.book.notebook.model.YearDetail;
 
 import java.util.ArrayList;
@@ -16,4 +15,5 @@ public class ReadingMapper {
         });
         return yearDetailList;
     }
+
 }
