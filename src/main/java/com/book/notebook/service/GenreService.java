@@ -27,18 +27,6 @@ public class GenreService {
     }
 
     /**
-     * Get all unique genre titles in database
-     * @return list of all unique genre titles
-     */
-    public List<String> getAllUniqueGenres() {
-        return genreRepository.findAll()
-                .stream()
-                .map(Genre::getTitle)
-                .distinct()
-                .toList();
-    }
-
-    /**
      * Save a list of new Genre Entities in database
      * @param genreTitles genre names
      * @param idBook book Id

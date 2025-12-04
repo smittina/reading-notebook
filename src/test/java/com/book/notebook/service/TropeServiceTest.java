@@ -55,33 +55,6 @@ public class TropeServiceTest {
     }
 
     @Test
-    void getAllUniqueTropeTest(){
-        // given
-        Trope trope1 = new Trope(1L, "Trope1", 1L);
-        Trope trope2 = new Trope(2L, "Trope1", 2L);
-        Trope trope3 = new Trope(3L, "Trope2", 2L);
-        Trope trope4 = new Trope(4L, "Trope3", 3L);
-        Trope trope5 = new Trope(5L, "Trope4", 3L);
-
-        List<Trope> tropes = Arrays.asList(trope1, trope2, trope3, trope4, trope5);
-        doReturn(tropes).when(tropeRepository).findAll();
-
-        List<String> expected = Arrays.asList("Trope1", "Trope2", "Trope3", "Trope4");
-
-        // when
-        List<String> result = serviceTest.getAllUniqueTropes();
-
-        // then
-        assertEquals(expected.size(), result.size());
-        if(result.size() == 4) {
-            assertEquals(expected.get(0), result.get(0));
-            assertEquals(expected.get(1), result.get(1));
-            assertEquals(expected.get(2), result.get(2));
-            assertEquals(expected.get(3), result.get(3));
-        }
-    }
-
-    @Test
     void createTropeTest(){
         // given
         List<String> tropeList =  Arrays.asList("Trope1", "Trope2");

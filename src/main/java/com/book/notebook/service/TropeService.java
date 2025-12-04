@@ -28,18 +28,6 @@ public class TropeService {
     }
 
     /**
-     * Get all unique trope titles in database
-     * @return list of all unique trope titles
-     */
-    public List<String> getAllUniqueTropes(){
-        return tropeRepository.findAll()
-                .stream()
-                .map(Trope::getTitle)
-                .distinct()
-                .toList();
-    }
-
-    /**
      * Save a list of new Trope Entities in database
      * @param tropeTitle trope name
      * @param idBook book Id

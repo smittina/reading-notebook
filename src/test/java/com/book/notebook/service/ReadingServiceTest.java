@@ -47,6 +47,10 @@ public class ReadingServiceTest {
     private TropeService tropeService;
     @Mock
     private QuotationService quotationService;
+    @Mock
+    private GenreListService genreListService;
+    @Mock
+    private TropeListService tropeListService;
 
     @InjectMocks
     private ReadingService serviceTest;
@@ -358,13 +362,24 @@ public class ReadingServiceTest {
 
         List<Author> authors = Arrays.asList(author1, author2, author3, author4);
 
-        List<String> genres = Arrays.asList("Genre 1", "Genre 2", "Genre 3", "Genre 4", "Genre 5");
-        List<String> tropes = Arrays.asList("Trope 1", "Trope 2", "Trope 3");
+        List<GenreList> genres = Arrays.asList(
+                new GenreList(1L, "Genre 1"),
+                new GenreList(2L, "Genre 2"),
+                new GenreList(3L, "Genre 3"),
+                new GenreList(4L, "Genre 4"),
+                new GenreList(5L, "Genre 5")
+        );
+
+        List<TropeList> tropes = Arrays.asList(
+                new TropeList(1L, "Trope 1"),
+                new TropeList(2L, "Trope 2"),
+                new TropeList(3L, "Trope 3")
+        );
 
         doReturn(books).when(bookService).getAllUniqueBooks();
         doReturn(authors).when(authorService).getAllUniqueAuthors();
-        doReturn(genres).when(genreService).getAllUniqueGenres();
-        doReturn(tropes).when(tropeService).getAllUniqueTropes();
+        doReturn(genres).when(genreListService).getAll();
+        doReturn(tropes).when(tropeListService).getAll();
 
         // when
         FormInformation result = serviceTest.getFormInformation();

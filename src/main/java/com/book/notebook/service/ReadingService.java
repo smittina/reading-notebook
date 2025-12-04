@@ -5,6 +5,7 @@ import java.util.*;
 import com.book.notebook.entity.*;
 import com.book.notebook.enumeration.StatusOfReading;
 import com.book.notebook.enumeration.TypeOfReading;
+import com.book.notebook.mapper.ReadingConfigurationMapper;
 import com.book.notebook.model.BookResume;
 import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
@@ -33,6 +34,10 @@ public class ReadingService {
     private GenreService genreService;
     @Autowired
     private QuotationService quotationService;
+    @Autowired
+    private GenreListService genreListService;
+    @Autowired
+    private TropeListService tropeListService;
 
     // ------------------------------- DATABASE OPERATIONS --------------------------------- //
 
@@ -182,9 +187,9 @@ public class ReadingService {
         // Get all unique authors
         List<Author> authors = authorService.getAllUniqueAuthors();
         // Get list of unique genres
-        List<String> genres = genreService.getAllUniqueGenres();
+        List<String> genres = ReadingConfigurationMapper.convertGenreListToNameList(genreListService.getAll());
         // Get list of unique tropes
-        List<String> tropes = tropeService.getAllUniqueTropes();
+        List<String> tropes = ReadingConfigurationMapper.convertTropeListToNameList(tropeListService.getAll());
 
         return new FormInformation(books, authors, genres, tropes);
     }
