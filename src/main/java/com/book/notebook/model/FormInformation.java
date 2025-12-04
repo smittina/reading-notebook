@@ -6,9 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -17,8 +16,8 @@ public class FormInformation {
 
     private List<String> genres;
     private List<String> tropes;
-    private Map<Long, String> books;
-    private Map<Long, String> authors;
+    private List<ExistentBook> books;
+    private List<ExistentAuthor> authors;
 
     public FormInformation(List<Book> books,
                            List<Author> authors,
@@ -26,30 +25,18 @@ public class FormInformation {
                            List<String> tropes) {
         this.genres = genres;
         this.tropes = tropes;
-        this.books = new HashMap<>();
-        this.authors = new HashMap<>();
+        this.books = new ArrayList<>();
+        this.authors = new ArrayList<>();
 
-        setBooks(books);
-        setAuthors(authors);
+        this.setExistentBooksFromBookList(books);
+        this.setExistentAuthorsFromAuthorList(authors);
     }
 
-    public void setBooks(List<Book> books) {
-        books.forEach(book -> {
-           this.books.put(book.getId(), book.getTitle());
-        });
+    public void setExistentBooksFromBookList(List<Book> books) {
+        books.forEach(book -> this.books.add(new ExistentBook(book.getId(), book.getTitle())));
     }
 
-    public void setBooks(Map<Long, String> books) {
-        this.books = books;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        authors.forEach(author -> {
-            this.authors.put(author.getId(), author.getFullname());
-        });
-    }
-
-    public void setAuthors(Map<Long, String> authors) {
-        this.authors = authors;
+    public void setExistentAuthorsFromAuthorList(List<Author> authors) {
+        authors.forEach(author -> this.authors.add(new ExistentAuthor(author.getId(), author.getFullname())));
     }
 }

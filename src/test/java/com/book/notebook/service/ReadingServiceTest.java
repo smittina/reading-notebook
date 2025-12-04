@@ -401,7 +401,7 @@ public class ReadingServiceTest {
     void constructReadingTest() {
         // given
         ReadingDetail detail = new ReadingDetail();
-        detail.setBookId(1L);
+        detail.setIdBook(1L);
         detail.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
         detail.setFinished(LocalDate.of(2025, Month.FEBRUARY, 1).atStartOfDay());
         detail.setStatus("terminé");
@@ -443,7 +443,7 @@ public class ReadingServiceTest {
     void creatingNewReadingTest() {
         // given
         ReadingDetail detail = new ReadingDetail();
-        detail.setBookId(0);
+        detail.setIdBook(0);
         detail.setIdAuthor(0);
         detail.setAuthorName("Author 1");
         detail.setGenres(Arrays.asList("Genre 1", "Genre 2"));
@@ -487,7 +487,7 @@ public class ReadingServiceTest {
     void creatingNewReadingWhenIsReReadingTest() {
         // given
         ReadingDetail detail = new ReadingDetail();
-        detail.setBookId(1);
+        detail.setIdBook(1);
         detail.setIdAuthor(1);
         detail.setAuthorName("Author 1");
         detail.setGenres(Arrays.asList("Genre 1", "Genre 2"));
@@ -523,7 +523,7 @@ public class ReadingServiceTest {
     void constructReadingWhenBookIsNotFinishedTest() {
         // given
         ReadingDetail detail = new ReadingDetail();
-        detail.setBookId(1L);
+        detail.setIdBook(1L);
         detail.setStarting(LocalDate.of(2025, Month.JANUARY, 18).atStartOfDay());
         detail.setFinished(null);
         detail.setStatus("en cours");

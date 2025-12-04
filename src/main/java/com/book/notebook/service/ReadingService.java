@@ -202,21 +202,21 @@ public class ReadingService {
      * @return new reading Entity
      */
     public Reading createNewReading(ReadingDetail readingDetail) {
-        boolean isReReading = readingDetail.getIdAuthor() == 0 && readingDetail.getBookId() == 0;
-        if(isReReading) {
+        boolean isNewReading = readingDetail.getIdAuthor() == 0 && readingDetail.getIdBook() == 0;
+        if(isNewReading) {
             // AUTHOR
             Author newAuthor = authorService.createAuthor(readingDetail.getAuthorName());
             readingDetail.setIdAuthor(newAuthor.getId());
             // BOOK
             Book newBook = bookService.createBook(readingDetail);
-            readingDetail.setBookId(newBook.getId());
+            readingDetail.setIdBook(newBook.getId());
             // GENRE
-            genreService.createNewGenres(readingDetail.getGenres(), readingDetail.getBookId());
+            genreService.createNewGenres(readingDetail.getGenres(), readingDetail.getIdBook());
             // TROPE
-            tropeService.createNewTropes(readingDetail.getTropes(), readingDetail.getBookId());
+            tropeService.createNewTropes(readingDetail.getTropes(), readingDetail.getIdBook());
         }
         // QUOTATION
-        quotationService.createNewQuotations(readingDetail.getQuotations(), readingDetail.getBookId());
+        quotationService.createNewQuotations(readingDetail.getQuotations(), readingDetail.getIdBook());
         // READING
         Reading newReading = constructReading(readingDetail);
         return readingRepository.save(newReading);
@@ -231,7 +231,7 @@ public class ReadingService {
      */
     public Reading constructReading(ReadingDetail detail) {
         Reading newReading = new Reading();
-        newReading.setBookId(detail.getBookId());
+        newReading.setBookId(detail.getIdBook());
         if(detail.getFinished() != null) {
             newReading.setYearOfReading(detail.getFinished().getYear());
             newReading.setMonthOfReading(detail.getFinished().getMonth().getValue());

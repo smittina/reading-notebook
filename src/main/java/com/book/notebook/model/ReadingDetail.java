@@ -18,7 +18,7 @@ import java.util.List;
 public class ReadingDetail {
 
     // General
-    private long bookId;
+    private long idBook;
     private String title;
     private String authorName;
     private long idAuthor;
@@ -51,7 +51,7 @@ public class ReadingDetail {
 
         // General
         this.title = book.getTitle();
-        this.bookId = book.getId();
+        this.idBook = book.getId();
         this.authorName = author.getFullname();
         this.idAuthor = author.getId();
         this.cover = book.getCover();
