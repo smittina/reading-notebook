@@ -6,6 +6,7 @@ import com.book.notebook.model.BookResume;
 import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
 import com.book.notebook.model.YearDetail;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @RestController
 @ResponseBody
+@Slf4j
 public class ReadingController {
 
     @Autowired
@@ -24,11 +26,13 @@ public class ReadingController {
 
     @GetMapping("/readings")
     public List<YearDetail> getReadings() {
+        log.info("Get Readings");
         return ReadingMapper.convertMapToYearDetailList(readingService.getAllYearsOfReadings());
     }
 
     @GetMapping("/readings/{year}")
     public List<BookResume> getReadingsByYear(@PathVariable("year") int year) {
+        log.info("Get Readings by Year with parameters :"+year);
         return readingService.getAllBookResumesByYear(year);
     }
 
@@ -39,16 +43,19 @@ public class ReadingController {
 
     @GetMapping("/readings/reading-detail/{readingId}")
     public ReadingDetail getReadingDetail(@PathVariable Long readingId) {
+        log.info("Get ReadingDetails with parameter Reading Id :"+readingId);
         return readingService.getReadingDetail(readingId);
     }
 
     @GetMapping("/readings/form-information")
     public FormInformation getFormInformation() {
+        log.info("Get Form Information");
         return readingService.getFormInformation();
     }
 
     @PostMapping("/readings/create")
     public Reading createReading(@RequestBody ReadingDetail readingDetail) {
+        log.info("Create Reading with body : {}", readingDetail);
         return readingService.createNewReading(readingDetail);
     }
 
