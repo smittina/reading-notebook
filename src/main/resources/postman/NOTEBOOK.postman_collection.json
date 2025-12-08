@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "731c9a94-7fa0-4b19-92e5-c36e8422a204",
+		"name": "NOTEBOOK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7703782"
+	},
+	"item": [
+		{
+			"name": "GET BOOKS",
+			"item": [
+				{
+					"name": "GET all books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/readings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all books for a specific year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/readings/2025",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings",
+								"2025"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all books for specific year and month",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/readings/2023/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings",
+								"2023",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET reading detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/readings/reading-detail/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings",
+								"reading-detail",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET form information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/readings/form-information",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings",
+								"form-information"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CREATE READINGS",
+			"item": [
+				{
+					"name": "POST new reading",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idBook\": 0,\r\n    \"title\": \"Le Pont des Tempêtes\",\r\n    \"idAuthor\":0,\r\n    \"authorName\": \"Danielle L.Jensen\",\r\n    \"cover\": null,\r\n    \"synopsis\": null,\r\n    \"genres\": [\r\n        \"Romantasy\",\r\n        \"Adulte\"\r\n    ],\r\n    \"tropes\": [\r\n        \"Mariage arrangé\",\r\n        \"Ennemies to Lovers\"\r\n    ],\r\n    \"pageNumber\": 800,\r\n    \"saga\": true,\r\n    \"allTomePublished\": false,\r\n    \"numberOfTome\": 1,\r\n    \"status\": \"terminé\",\r\n    \"typeOfReading\": \"relié\",\r\n    \"starting\": \"2024-06-25T00:00:00\",\r\n    \"finished\": \"2024-07-27T00:00:00\",\r\n    \"currentPage\": 408,\r\n    \"rating\": 6.0,\r\n    \"quotations\": [\r\n        \"Je ne le dirai qu'une seule fois : le premier ou la première qui touche à Lara, je l'exécute.\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/readings/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST new reading from existent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idBook\": 7,\r\n    \"title\": \"Une ombre dans la braise\",\r\n    \"idAuthor\":7,\r\n    \"authorName\": \"Jennifer L. Armentrout\",\r\n    \"cover\": null,\r\n    \"synopsis\": null,\r\n    \"genres\": [\r\n        \"Romantasy\",\r\n        \"Adulte\"\r\n    ],\r\n    \"tropes\": [\r\n        \"Mariage arrangé\",\r\n        \"Strangers to Lovers\"\r\n    ],\r\n    \"pageNumber\": 800,\r\n    \"saga\": true,\r\n    \"allTomePublished\": false,\r\n    \"numberOfTome\": 1,\r\n    \"status\": \"terminé\",\r\n    \"typeOfReading\": \"relié\",\r\n    \"starting\": \"2025-06-25T00:00:00\",\r\n    \"finished\": \"2025-07-27T00:00:00\",\r\n    \"currentPage\": 800,\r\n    \"rating\": 6.0,\r\n    \"quotations\": [\r\n        \"Death always finds you, one way or another.\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/readings/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"readings",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CONFIG",
+			"item": [
+				{
+					"name": "GET config",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/config",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"config"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CONFIG",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"genres\": [\"Fantasy\", \"Contemporain\"],\r\n    \"tropes\": [\"Mariage arrangé\", \"Ennemies to Lovers\", \"Strangers to Lovers\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/config/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"config",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
