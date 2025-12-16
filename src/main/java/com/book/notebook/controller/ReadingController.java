@@ -2,20 +2,18 @@ package com.book.notebook.controller;
 
 import com.book.notebook.entity.Reading;
 import com.book.notebook.mapper.ReadingMapper;
-import com.book.notebook.model.BookResume;
-import com.book.notebook.model.FormInformation;
-import com.book.notebook.model.ReadingDetail;
-import com.book.notebook.model.YearDetail;
+import com.book.notebook.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.book.notebook.service.ReadingService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @ResponseBody
 @Slf4j
@@ -39,6 +37,12 @@ public class ReadingController {
     @GetMapping("/readings/{year}/{month}")
     public List<Reading> getReadingsByYearAndMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
         return readingService.getAllByMonthAndYearOfReading(year, month);
+    }
+
+    @GetMapping("/all-readings")
+    public List<ReadingResume> getAllReadings() {
+        log.info("Get All Reading Resumes");
+        return readingService.getAllReadingResumes();
     }
 
     @GetMapping("/readings/reading-detail/{readingId}")

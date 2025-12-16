@@ -9,6 +9,7 @@ import com.book.notebook.mapper.ReadingConfigurationMapper;
 import com.book.notebook.model.BookResume;
 import com.book.notebook.model.FormInformation;
 import com.book.notebook.model.ReadingDetail;
+import com.book.notebook.model.ReadingResume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,25 @@ public class ReadingService {
      */
     public List<Reading> getAllByYearOfReading(int year) {
         return readingRepository.findAllByYearOfReading(year);
+    }
+
+    public List<ReadingResume> getAllReadingResumes() {
+
+        List<ReadingResume> readingResumes = new ArrayList<>();
+
+        List<Integer> years = readingRepository.findAllYearOfReading();
+        years.forEach(year -> {
+            List<Reading> readings = getAllByYearOfReading(year);
+            List<BookResume> bookResumes = new ArrayList<>();
+            readings.forEach(reading -> {
+                Book book = bookService.getBookById(reading.getBookId());
+                Author author = authorService.getAuthorById(book.getAuthorId());
+                bookResumes.add(new BookResume(reading.getId(), book.getId(), author.getId(), book.getTitle(), author.getFullname(), reading.getRating()));
+            });
+            readingResumes.add(new ReadingResume(year, bookResumes));
+        });
+
+        return readingResumes;
     }
 
     /**

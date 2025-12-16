@@ -1,5 +1,7 @@
 package com.book.notebook.mapper;
 
+import com.book.notebook.entity.Reading;
+import com.book.notebook.model.ReadingResume;
 import com.book.notebook.model.YearDetail;
 
 import java.util.ArrayList;
@@ -21,5 +23,6 @@ public class ReadingMapper {
         readings.forEach((key, value) -> yearDetailList.add(new YearDetail(key, value)));
         return yearDetailList;
     }
+
 
 }

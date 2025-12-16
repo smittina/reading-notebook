@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.book.notebook.entity.Reading;
@@ -19,5 +20,8 @@ public interface ReadingRepository extends JpaRepository<Reading, Long> {
     List<Reading> findAllByYearOfReading(int yearOfReading);
 
     List<Reading> findAllByYearOfReadingAndMonthOfReading(int yearOfReading, int monthOfReading);
+
+    @Query("SELECT DISTINCT r.yearOfReading FROM Reading r")
+    List<Integer> findAllYearOfReading();
 
 }
