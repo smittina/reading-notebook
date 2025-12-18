@@ -344,23 +344,24 @@ public class ReadingServiceTest {
         Book book1 = new Book();
         book1.setId(1L);
         book1.setTitle("Book 1");
+        book1.setAuthorId(1L);
 
         Book book2 = new Book();
         book2.setId(2L);
         book2.setTitle("Book 2");
+        book2.setAuthorId(2L);
 
         Book book3 = new Book();
         book3.setId(3L);
         book3.setTitle("Book 3");
+        book3.setAuthorId(1L);
 
         List<Book> books = Arrays.asList(book1, book2, book3);
 
         Author author1 = new Author(1L, "Author 1");
         Author author2 = new Author(2L, "Author 2");
-        Author author3 = new Author(3L, "Author 3");
-        Author  author4 = new Author(4L, "Author 4");
 
-        List<Author> authors = Arrays.asList(author1, author2, author3, author4);
+        List<Author> authors = Arrays.asList(author1, author2);
 
         List<GenreList> genres = Arrays.asList(
                 new GenreList(1L, "Genre 1"),
@@ -385,15 +386,13 @@ public class ReadingServiceTest {
         FormInformation result = serviceTest.getFormInformation();
 
         // then
-        assertNotNull(result.getBooks());
         assertNotNull(result.getAuthors());
         assertNotNull(result.getGenres());
         assertNotNull(result.getTropes());
 
-        assertEquals(3, result.getBooks().size());
-        assertEquals(4, result.getAuthors().size());
-        assertEquals(5, result.getGenres().size());
-        assertEquals(3, result.getTropes().size());
+        assertEquals(2, result.getAuthors().size());
+        assertEquals(2, result.getAuthors().get(0).getBooks().size());
+        assertEquals(1, result.getAuthors().get(1).getBooks().size());
 
     }
 

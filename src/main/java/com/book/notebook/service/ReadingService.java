@@ -6,10 +6,7 @@ import com.book.notebook.entity.*;
 import com.book.notebook.enumeration.StatusOfReading;
 import com.book.notebook.enumeration.TypeOfReading;
 import com.book.notebook.mapper.ReadingConfigurationMapper;
-import com.book.notebook.model.BookResume;
-import com.book.notebook.model.FormInformation;
-import com.book.notebook.model.ReadingDetail;
-import com.book.notebook.model.ReadingResume;
+import com.book.notebook.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -201,17 +198,40 @@ public class ReadingService {
      * Get all informations necessary to create new reading or update an existent reading
      * @return form informations
      */
+//    public FormInformation getFormInformation() {
+//        // Get all unique books
+//        List<Book> books = bookService.getAllUniqueBooks();
+//        // Get all unique authors
+//        List<Author> authors = authorService.getAllUniqueAuthors();
+//        // Get list of unique genres
+//        List<String> genres = ReadingConfigurationMapper.convertGenreListToNameList(genreListService.getAll());
+//        // Get list of unique tropes
+//        List<String> tropes = ReadingConfigurationMapper.convertTropeListToNameList(tropeListService.getAll());
+//
+//        return new FormInformation(books, authors, genres, tropes);
+//    }
+
     public FormInformation getFormInformation() {
         // Get all unique books
         List<Book> books = bookService.getAllUniqueBooks();
         // Get all unique authors
         List<Author> authors = authorService.getAllUniqueAuthors();
+        List<ExistentAuthor> existentAuthors = new ArrayList<>();
+        authors.forEach(author -> {
+            existentAuthors.add(new ExistentAuthor(author.getId(), author.getFullname()));
+        });
+        books.forEach(book -> {
+            ExistentAuthor currentAuthor = existentAuthors.stream()
+                    .filter(author -> author.getId().equals(book.getAuthorId()))
+                    .findFirst().get();
+            currentAuthor.getBooks().add(new ExistentBook(book.getId(), book.getTitle()));
+        });
         // Get list of unique genres
         List<String> genres = ReadingConfigurationMapper.convertGenreListToNameList(genreListService.getAll());
         // Get list of unique tropes
         List<String> tropes = ReadingConfigurationMapper.convertTropeListToNameList(tropeListService.getAll());
 
-        return new FormInformation(books, authors, genres, tropes);
+        return new FormInformation(genres, tropes, existentAuthors);
     }
 
     // ----------------------- CREATE AND UPDATE ENTRANCE IN REPOSITORIES ------------------------------------ //
